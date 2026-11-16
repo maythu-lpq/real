@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E1 Mechanism — Unimolecular Elimination</title>
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface-alt: #F1F5F9;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --primary: #1E3A8A;
+      --primary-light: #D97706;
+      --accent: #F59E0B;
+      --border: #E2E8F0;
+      --border-dark: #CBD5E1;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 500;
+      padding: 0.45rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: all 0.15s ease;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      background: #FEF3C7;
+      color: var(--primary-light);
+      font-weight: 600;
+    }
+
+    .page-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    .breadcrumb {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .breadcrumb a { color: var(--primary-light); text-decoration: none; }
+
+    .header-box { margin-bottom: 2rem; }
+    .header-box h1 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .header-box .lead {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card h2 {
+      font-size: 1.45rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #FEF3C7;
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      color: var(--text);
+      margin: 1.25rem 0 0.5rem;
+    }
+
+    .svg-container {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .svg-caption {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
+    .callout {
+      background: #FFFBEB;
+      border-left: 4px solid var(--primary-light);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      color: #92400E;
+      margin-bottom: 0.25rem;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.925rem;
+    }
+
+    table.data-table th, table.data-table td {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    table.data-table th {
+      background: var(--surface-alt);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .factor-pill {
+      background: var(--surface-alt);
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .factor-pill h4 {
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+      font-size: 1rem;
+    }
+
+    .factor-pill p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .source-cite {
+      background: #F1F5F9;
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      display: inline-block;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="../index.html" class="brand">
+        <span>← Mechanism Hub</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="sn1.html">S<sub>N</sub>1</a></li>
+        <li><a href="sn2.html">S<sub>N</sub>2</a></li>
+        <li><a href="e1.html" class="active">E1</a></li>
+        <li><a href="e2.html">E2</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="breadcrumb">
+      <a href="../index.html">Home</a> &rsaquo; <span>Mechanisms</span> &rsaquo; <span>E1</span>
+    </div>
+
+    <div class="header-box">
+      <div class="source-cite">📖 Grounded Knowledge: <code>wiki/e1.md</code></div>
+      <h1>E1 Mechanism</h1>
+      <p class="lead">Unimolecular Elimination &bull; Carbocation Intermediate &bull; Zaitsev Regioselectivity</p>
+    </div>
+
+    <!-- Overview & Kinetics -->
+    <section class="card">
+      <h2>1. Overview &amp; Kinetics</h2>
+      <p>
+        <strong>E1</strong> (Elimination, <strong>Unimolecular</strong>) is a two-step elimination process. In Step 1, the leaving group ionizes away to generate a <strong>carbocation intermediate</strong> (identical to the first step of S<sub>N</sub>1). In Step 2, a weak base abstracts a β-proton, and the electron pair collapses to form a new carbon–carbon <strong>π bond (alkene)</strong>.
+      </p>
+
+      <div class="callout">
+        <div class="callout-title">Rate Law &amp; First-Order Kinetics</div>
+        <p><strong>Rate = <em>k</em>[Substrate]</strong> &mdash; Because the base is not involved in the rate-determining ionization, its concentration does not appear in the rate equation. Doubling [Substrate] doubles the rate; altering [Base] has zero effect.</p>
+      </div>
+
+      <!-- E1 Reaction Coordinate SVG -->
+      <div class="svg-container">
+        <svg viewBox="0 0 760 300" width="100%" height="260" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+            </marker>
+          </defs>
+          <line x1="60" y1="260" x2="720" y2="260" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)" />
+          <line x1="60" y1="260" x2="60" y2="20" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)" />
+          
+          <text x="710" y="285" font-size="12" fill="#64748B" text-anchor="end" font-weight="600">Reaction Coordinate →</text>
+          <text x="25" y="30" font-size="12" fill="#64748B" transform="rotate(-90 25,30)" font-weight="600">Free Energy (ΔG) →</text>
+
+          <!-- 2-peak curve -->
+          <path d="M 60 210 C 130 210, 180 50, 240 50 C 300 50, 330 160, 390 160 C 450 160, 480 120, 530 120 C 590 120, 630 220, 700 220" 
+                fill="none" stroke="#D97706" stroke-width="3.5" />
+
+          <!-- Reactants -->
+          <circle cx="80" cy="210" r="4" fill="#1E3A8A" />
+          <text x="80" y="235" font-size="13" font-weight="700" fill="#1E3A8A">R–LG</text>
+          <text x="80" y="250" font-size="11" fill="#64748B">Reactant</text>
+
+          <!-- TS1 -->
+          <circle cx="240" cy="50" r="5" fill="#DC2626" />
+          <text x="240" y="35" font-size="13" font-weight="700" fill="#DC2626" text-anchor="middle">TS1<sup>‡</sup> (RDS Ionization)</text>
+          <text x="240" y="70" font-size="11" fill="#64748B" text-anchor="middle">[R<sup>δ+</sup>···LG<sup>δ−</sup>]</text>
+
+          <!-- Carbocation Intermediate -->
+          <circle cx="390" cy="160" r="5" fill="#0D9488" />
+          <text x="390" y="185" font-size="13" font-weight="700" fill="#0D9488" text-anchor="middle">R<sup>+</sup> + LG<sup>−</sup></text>
+          <text x="390" y="200" font-size="11" fill="#0F766E" text-anchor="middle">Carbocation Intermediate</text>
+
+          <!-- TS2 -->
+          <circle cx="530" cy="120" r="5" fill="#F59E0B" />
+          <text x="530" y="105" font-size="13" font-weight="700" fill="#B45309" text-anchor="middle">TS2<sup>‡</sup> (Deprotonation)</text>
+          <text x="530" y="140" font-size="11" fill="#64748B" text-anchor="middle">[B···H···C=C]</text>
+
+          <!-- Alkene Product -->
+          <circle cx="680" cy="220" r="4" fill="#1E3A8A" />
+          <text x="680" y="240" font-size="13" font-weight="700" fill="#1E3A8A">Alkene + B–H<sup>+</sup> + LG<sup>−</sup></text>
+          <text x="680" y="255" font-size="11" fill="#64748B">Zaitsev Alkene Product</text>
+        </svg>
+        <div class="svg-caption">Figure 3.1: E1 Reaction Coordinate showing carbocation formation (rate-determining TS1) followed by β-deprotonation (TS2).</div>
+      </div>
+    </section>
+
+    <!-- Step-by-Step Mechanism with Curved Arrows SVG -->
+    <section class="card">
+      <h2>2. Step-by-Step Mechanism</h2>
+
+      <h3>Step 1: Heterolytic Bond Cleavage (Slow, Rate-Determining)</h3>
+      <p>
+        The leaving group departs taking the electron pair, producing a planar <strong>sp<sup>2</sup> carbocation</strong> at the α-carbon.
+      </p>
+
+      <h3>Step 2: Base Abstraction of β-Hydrogen (Fast)</h3>
+      <p>
+        A weak base (often solvent such as H<sub>2</sub>O or EtOH) abstracts a hydrogen from an adjacent β-carbon. The electrons from the broken C<sub>β</sub>–H bond flow directly into the empty <em>p</em> orbital on C<sub>α</sub>, forging the C=C π bond.
+      </p>
+
+      <!-- SVG Curved Arrow Mechanism -->
+      <div class="svg-container">
+        <svg viewBox="0 0 820 270" width="100%" height="260" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="curv-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#DC2626" />
+            </marker>
+            <marker id="curv-orange" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#D97706" />
+            </marker>
+          </defs>
+
+          <!-- Step 1 Box -->
+          <g transform="translate(10, 20)">
+            <rect width="360" height="225" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+            <text x="20" y="30" font-size="12" font-weight="700" fill="#1E3A8A">STEP 1: Ionization to Carbocation (Slow)</text>
+
+            <text x="60" y="95" font-size="14" font-family="monospace">
+              H &nbsp;CH<sub>3</sub><br>
+              | &nbsp;|<br>
+              H&mdash;C<sub>β</sub>&mdash;C<sub>α</sub>&mdash;<tspan font-weight="700" fill="#DC2626">Br</tspan><br>
+              | &nbsp;|<br>
+              H &nbsp;CH<sub>3</sub>
+            </text>
+
+            <!-- Curved arrow from C-Br to Br -->
+            <path d="M 160 130 Q 180 105 190 120" fill="none" stroke="#DC2626" stroke-width="2.5" marker-end="url(#curv-red)" />
+
+            <line x1="220" y1="140" x2="260" y2="140" stroke="#1E3A8A" stroke-width="2" marker-end="url(#arrow)" />
+            <text x="240" y="130" font-size="10" fill="#1E3A8A" font-weight="600" text-anchor="middle">slow</text>
+
+            <text x="270" y="125" font-size="14" font-family="monospace" fill="#0D9488" font-weight="700">R<sub>3</sub>C<sup>+</sup></text>
+            <text x="270" y="150" font-size="13" font-family="monospace" fill="#DC2626">+ :Br<sup>−</sup></text>
+          </g>
+
+          <!-- Step 2 Box -->
+          <g transform="translate(390, 20)">
+            <rect width="415" height="225" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+            <text x="20" y="30" font-size="12" font-weight="700" fill="#1E3A8A">STEP 2: β-H Deprotonation &amp; π-Bond Formation</text>
+
+            <!-- Weak Base -->
+            <text x="30" y="70" font-size="14" font-weight="700" fill="#D97706">B:</text>
+            <!-- Curved arrow from Base to H -->
+            <path d="M 50 65 Q 75 75 85 95" fill="none" stroke="#D97706" stroke-width="2" marker-end="url(#curv-orange)" />
+
+            <!-- Substrate intermediate -->
+            <text x="90" y="115" font-size="16" font-family="monospace" font-weight="700" fill="#0F172A">H</text>
+            <line x1="97" y1="120" x2="97" y2="140" stroke="#0F172A" stroke-width="2" />
+            
+            <text x="85" y="155" font-size="15" font-family="monospace" fill="#0F172A">C<sub>β</sub></text>
+            <line x1="105" y1="150" x2="145" y2="150" stroke="#0F172A" stroke-width="2" />
+            
+            <text x="150" y="155" font-size="15" font-family="monospace" font-weight="700" fill="#0D9488">C<sub>α</sub><sup>+</sup></text>
+
+            <!-- Curved arrow from C-H bond to C-C bond -->
+            <path d="M 97 130 Q 120 135 125 145" fill="none" stroke="#D97706" stroke-width="2.5" marker-end="url(#curv-orange)" />
+
+            <line x1="195" y1="150" x2="235" y2="150" stroke="#1E3A8A" stroke-width="2" marker-end="url(#arrow)" />
+            <text x="215" y="140" font-size="10" fill="#1E3A8A" font-weight="600" text-anchor="middle">fast</text>
+
+            <!-- Alkene Product -->
+            <text x="250" y="135" font-size="16" font-family="monospace" font-weight="700" fill="#166534">
+              &nbsp; &nbsp;CH<sub>3</sub><br>
+              CH<sub>2</sub> = C &nbsp;+ B–H<sup>+</sup><br>
+              &nbsp; &nbsp;CH<sub>3</sub>
+            </text>
+            <text x="310" y="195" font-size="11" font-weight="600" fill="#166534" text-anchor="middle">Alkene (Zaitsev Product)</text>
+          </g>
+        </svg>
+        <div class="svg-caption">Figure 3.2: Mechanism of E1 elimination: C–Br heterolysis followed by β-hydrogen abstraction and π bond formation.</div>
+      </div>
+    </section>
+
+    <!-- Regiochemistry & Stereochemistry -->
+    <section class="card">
+      <h2>3. Regiochemistry &amp; Stereochemistry</h2>
+      
+      <h3>Zaitsev's Rule (More Substituted Alkene Major)</h3>
+      <p>
+        When multiple β-carbons carry hydrogens, elimination follows <strong>Zaitsev's rule</strong>: the 
+        <strong>more substituted, thermodynamically more stable alkene</strong> predominates. Greater hyperconjugation 
+        and alkyl inductive donation lower the transition state energy for β-proton abstraction.
+      </p>
+
+      <h3>Lack of Stereospecificity &amp; <em>E</em>/<em>Z</em> Mixtures</h3>
+      <p>
+        Unlike E2, E1 has <strong>no strict anti-periplanar requirement</strong>. Because the carbocation intermediate is free to rotate around its single bond before deprotonation, both <em>E</em> (trans) and <em>Z</em> (cis) alkenes can form. The less sterically crowded <strong><em>E</em>-isomer</strong> typically predominates.
+      </p>
+
+      <div class="callout">
+        <div class="callout-title">Carbocation Rearrangements</div>
+        <p>
+          Because a real carbocation intermediate exists, 1,2-hydride shifts and 1,2-alkyl shifts will occur whenever a secondary carbocation can rearrange into a more stable tertiary carbocation.
+        </p>
+      </div>
+    </section>
+
+    <!-- Controlling Factors & Competition with SN1 -->
+    <section class="card">
+      <h2>4. Controlling Factors &amp; S<sub>N</sub>1 Competition</h2>
+      <div class="grid-2">
+        <div class="factor-pill">
+          <h4>1. Substrate Class</h4>
+          <p>Requires carbocation stability: <strong>3° >> 2°</strong>. Primary and methyl substrates never undergo E1.</p>
+        </div>
+        <div class="factor-pill">
+          <h4>2. Base &amp; Nucleophile</h4>
+          <p>Weak bases (solvent like H<sub>2</sub>O, EtOH) suffice. Strong bases divert the pathway to <strong>E2</strong>.</p>
+        </div>
+        <div class="factor-pill">
+          <h4>3. Temperature (The Deciding Factor)</h4>
+          <p><strong>High temperature (&Delta;, reflux)</strong> strongly favors E1 over S<sub>N</sub>1 due to favorable entropy (&Delta;S > 0 for elimination: 2 molecules &rarr; 3 products).</p>
+        </div>
+        <div class="factor-pill">
+          <h4>4. Solvent Effects</h4>
+          <p><strong>Polar protic solvents</strong> (water, alcohols) stabilize the carbocation intermediate and departing anion via solvation shells.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Mechanisms Navigation -->
+    <section class="card">
+      <h2>5. Cross-Mechanism Relationships</h2>
+      <p>Compare E1 with other pathways:</p>
+      <ul style="margin: 1rem 1.5rem; line-height: 1.8;">
+        <li><a href="sn1.html"><strong>S<sub>N</sub>1 Mechanism</strong></a> &mdash; Shares the identical carbocation intermediate. Room temperature favors S<sub>N</sub>1; heat favors E1.</li>
+        <li><a href="e2.html"><strong>E2 Mechanism</strong></a> &mdash; Concerted bimolecular elimination requiring strong base and anti-periplanar geometry.</li>
+        <li><a href="sn2.html"><strong>S<sub>N</sub>2 Mechanism</strong></a> &mdash; Concerted substitution favored on unhindered substrates.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Organic Chemistry Reaction Mechanism Wiki &bull; E1 Mechanism Guide</p>
+  </footer>
+</body>
+</html>

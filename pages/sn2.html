@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S<sub>N</sub>2 Mechanism — Bimolecular Nucleophilic Substitution</title>
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface-alt: #F1F5F9;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --primary: #1E3A8A;
+      --primary-light: #0D9488;
+      --accent: #14B8A6;
+      --border: #E2E8F0;
+      --border-dark: #CBD5E1;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 500;
+      padding: 0.45rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: all 0.15s ease;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      background: #F0FDFA;
+      color: var(--primary-light);
+      font-weight: 600;
+    }
+
+    .page-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    .breadcrumb {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .breadcrumb a { color: var(--primary-light); text-decoration: none; }
+
+    .header-box { margin-bottom: 2rem; }
+    .header-box h1 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .header-box .lead {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card h2 {
+      font-size: 1.45rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #F0FDFA;
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      color: var(--text);
+      margin: 1.25rem 0 0.5rem;
+    }
+
+    .svg-container {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .svg-caption {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
+    .callout {
+      background: #F0FDFA;
+      border-left: 4px solid var(--primary-light);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      color: #0F766E;
+      margin-bottom: 0.25rem;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.925rem;
+    }
+
+    table.data-table th, table.data-table td {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    table.data-table th {
+      background: var(--surface-alt);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .factor-pill {
+      background: var(--surface-alt);
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .factor-pill h4 {
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+      font-size: 1rem;
+    }
+
+    .factor-pill p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .source-cite {
+      background: #F1F5F9;
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      display: inline-block;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="../index.html" class="brand">
+        <span>← Mechanism Hub</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="sn1.html">S<sub>N</sub>1</a></li>
+        <li><a href="sn2.html" class="active">S<sub>N</sub>2</a></li>
+        <li><a href="e1.html">E1</a></li>
+        <li><a href="e2.html">E2</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="breadcrumb">
+      <a href="../index.html">Home</a> &rsaquo; <span>Mechanisms</span> &rsaquo; <span>S<sub>N</sub>2</span>
+    </div>
+
+    <div class="header-box">
+      <div class="source-cite">📖 Grounded Knowledge: <code>wiki/sn2.md</code></div>
+      <h1>S<sub>N</sub>2 Mechanism</h1>
+      <p class="lead">Bimolecular Nucleophilic Substitution &bull; Concerted Backside Attack &bull; Walden Inversion</p>
+    </div>
+
+    <!-- Overview & Kinetics -->
+    <section class="card">
+      <h2>1. Overview &amp; Kinetics</h2>
+      <p>
+        The <strong>S<sub>N</sub>2</strong> (Substitution, Nucleophilic, <strong>Bimolecular</strong>) reaction is a single-step, concerted displacement mechanism. The incoming nucleophile attacks the electrophilic carbon from the rear (180° away from the leaving group), simultaneously pushing out the leaving group through a single <strong>trigonal bipyramidal transition state</strong>.
+      </p>
+
+      <div class="callout">
+        <div class="callout-title">Second-Order Kinetics</div>
+        <p><strong>Rate = <em>k</em>[Substrate][Nu<sup>−</sup>]</strong> &mdash; First-order in substrate and first-order in nucleophile. Doubling either reactant doubles the rate; doubling both quadruples the rate.</p>
+      </div>
+
+      <!-- Reaction Coordinate SVG -->
+      <div class="svg-container">
+        <svg viewBox="0 0 760 300" width="100%" height="260" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+            </marker>
+          </defs>
+          <!-- Axes -->
+          <line x1="60" y1="260" x2="720" y2="260" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)" />
+          <line x1="60" y1="260" x2="60" y2="20" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)" />
+          
+          <text x="710" y="285" font-size="12" fill="#64748B" text-anchor="end" font-weight="600">Reaction Coordinate →</text>
+          <text x="25" y="30" font-size="12" fill="#64748B" transform="rotate(-90 25,30)" font-weight="600">Free Energy (ΔG) →</text>
+
+          <!-- Single Barrier Energy Curve -->
+          <path d="M 60 210 C 180 210, 280 45, 390 45 C 500 45, 580 235, 700 235" 
+                fill="none" stroke="#0D9488" stroke-width="3.5" />
+
+          <!-- Reactants -->
+          <circle cx="90" cy="210" r="4" fill="#1E3A8A" />
+          <text x="90" y="235" font-size="13" font-weight="700" fill="#1E3A8A">Nu<sup>−</sup> + R–LG</text>
+          <text x="90" y="250" font-size="11" fill="#64748B">Reactants</text>
+
+          <!-- Single TS -->
+          <circle cx="390" cy="45" r="5" fill="#DC2626" />
+          <text x="390" y="30" font-size="13" font-weight="700" fill="#DC2626" text-anchor="middle">TS<sup>‡</sup> (Only Barrier)</text>
+          <text x="390" y="70" font-size="12" fill="#0F766E" font-weight="600" text-anchor="middle">[Nu<sup>δ−</sup>···C(R<sub>3</sub>)···LG<sup>δ−</sup>]<sup>‡</sup></text>
+          <text x="390" y="85" font-size="11" fill="#64748B" text-anchor="middle">Pentacoordinate Trigonal Bipyramid</text>
+
+          <!-- Products -->
+          <circle cx="680" cy="235" r="4" fill="#1E3A8A" />
+          <text x="680" y="255" font-size="13" font-weight="700" fill="#1E3A8A">Nu–R + LG<sup>−</sup></text>
+          <text x="680" y="270" font-size="11" fill="#64748B">Inverted Product (Exothermic)</text>
+
+          <!-- Activation Energy -->
+          <line x1="90" y1="210" x2="390" y2="210" stroke="#CBD5E1" stroke-dasharray="4" />
+          <line x1="390" y1="210" x2="390" y2="53" stroke="#DC2626" stroke-width="1.5" />
+          <text x="400" y="145" font-size="12" fill="#DC2626" font-weight="600">ΔG<sup>‡</sup> (E<sub>a</sub>)</text>
+        </svg>
+        <div class="svg-caption">Figure 2.1: S<sub>N</sub>2 Reaction Coordinate Diagram showing a single concerted transition state with no reactive intermediate.</div>
+      </div>
+    </section>
+
+    <!-- Concerted Backside Mechanism & Walden Inversion SVG -->
+    <section class="card">
+      <h2>2. Concerted Backside Attack &amp; Walden Inversion</h2>
+      <p>
+        The nucleophile must donate electron density into the <strong>σ* (antibonding)</strong> orbital of the C–LG bond. This orbital geometry strictly mandates a <strong>180° collinear backside attack</strong>.
+      </p>
+
+      <!-- SVG Mechanism Diagram -->
+      <div class="svg-container">
+        <svg viewBox="0 0 820 260" width="100%" height="250" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="curv-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#DC2626" />
+            </marker>
+            <marker id="curv-teal" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#0D9488" />
+            </marker>
+          </defs>
+
+          <!-- STAGE 1: Attack -->
+          <g transform="translate(10, 20)">
+            <rect width="230" height="210" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+            <text x="20" y="30" font-size="12" font-weight="700" fill="#1E3A8A">1. Backside Attack (180°)</text>
+            
+            <text x="25" y="115" font-size="15" font-weight="700" fill="#0D9488">Nu:<sup>−</sup></text>
+            <!-- Curved arrow to carbon -->
+            <path d="M 60 110 Q 90 95 110 110" fill="none" stroke="#0D9488" stroke-width="2.5" marker-end="url(#curv-teal)" />
+
+            <!-- Substrate: Carbon with wedge/dash -->
+            <text x="125" y="115" font-size="16" font-family="monospace" font-weight="700" fill="#0F172A">C</text>
+            <!-- Substituents umbrella pointing left -->
+            <line x1="125" y1="100" x2="105" y2="75" stroke="#0F172A" stroke-width="2" />
+            <text x="95" y="70" font-size="11" fill="#0F172A">R<sub>1</sub></text>
+
+            <line x1="125" y1="125" x2="105" y2="150" stroke="#0F172A" stroke-width="2" />
+            <text x="95" y="165" font-size="11" fill="#0F172A">R<sub>2</sub></text>
+
+            <line x1="135" y1="110" x2="190" y2="110" stroke="#0F172A" stroke-width="2.5" />
+            <text x="195" y="115" font-size="15" font-weight="700" fill="#DC2626">LG</text>
+
+            <!-- Curved arrow from C-LG to LG -->
+            <path d="M 160 105 Q 180 85 195 95" fill="none" stroke="#DC2626" stroke-width="2.5" marker-end="url(#curv-red)" />
+          </g>
+
+          <!-- ARROW -->
+          <line x1="255" y1="125" x2="285" y2="125" stroke="#1E3A8A" stroke-width="2" marker-end="url(#arrow)" />
+
+          <!-- STAGE 2: Transition State -->
+          <g transform="translate(295, 20)">
+            <rect width="250" height="210" rx="8" fill="#F0FDFA" stroke="#99F6E4" />
+            <text x="20" y="30" font-size="12" font-weight="700" fill="#0F766E">2. Pentacoordinate TS<sup>‡</sup></text>
+
+            <!-- Bracket representation -->
+            <text x="25" y="115" font-size="28" fill="#64748B">[</text>
+            <text x="215" y="115" font-size="28" fill="#64748B">]<sup>‡</sup></text>
+
+            <text x="45" y="115" font-size="13" font-weight="700" fill="#0D9488">Nu<sup>δ−</sup></text>
+            <line x1="80" y1="110" x2="120" y2="110" stroke="#0D9488" stroke-dasharray="3" stroke-width="2" />
+            
+            <!-- Planar C center -->
+            <text x="125" y="115" font-size="16" font-family="monospace" font-weight="700" fill="#0F172A">C</text>
+            <line x1="130" y1="95" x2="130" y2="65" stroke="#0F172A" stroke-width="2" />
+            <text x="125" y="60" font-size="11" fill="#0F172A">R<sub>1</sub></text>
+
+            <line x1="130" y1="125" x2="130" y2="155" stroke="#0F172A" stroke-width="2" />
+            <text x="125" y="170" font-size="11" fill="#0F172A">R<sub>2</sub></text>
+
+            <line x1="140" y1="110" x2="180" y2="110" stroke="#DC2626" stroke-dasharray="3" stroke-width="2" />
+            <text x="185" y="115" font-size="13" font-weight="700" fill="#DC2626">LG<sup>δ−</sup></text>
+
+            <text x="125" y="195" font-size="10" fill="#64748B" text-anchor="middle">Planar equatorial R groups</text>
+          </g>
+
+          <!-- ARROW -->
+          <line x1="560" y1="125" x2="590" y2="125" stroke="#1E3A8A" stroke-width="2" marker-end="url(#arrow)" />
+
+          <!-- STAGE 3: Inverted Product -->
+          <g transform="translate(600, 20)">
+            <rect width="210" height="210" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+            <text x="20" y="30" font-size="12" font-weight="700" fill="#1E3A8A">3. Walden Inversion</text>
+
+            <text x="25" y="115" font-size="15" font-weight="700" fill="#0D9488">Nu</text>
+            <line x1="50" y1="110" x2="105" y2="110" stroke="#0F172A" stroke-width="2.5" />
+            <text x="110" y="115" font-size="16" font-family="monospace" font-weight="700" fill="#0F172A">C</text>
+
+            <!-- Flipped umbrella pointing right -->
+            <line x1="120" y1="100" x2="145" y2="75" stroke="#0F172A" stroke-width="2" />
+            <text x="150" y="70" font-size="11" fill="#0F172A">R<sub>1</sub></text>
+
+            <line x1="120" y1="125" x2="145" y2="150" stroke="#0F172A" stroke-width="2" />
+            <text x="150" y="165" font-size="11" fill="#0F172A">R<sub>2</sub></text>
+
+            <text x="175" y="115" font-size="14" font-family="monospace" fill="#DC2626">+ :LG<sup>−</sup></text>
+            <text x="105" y="195" font-size="11" font-weight="700" fill="#166534" text-anchor="middle">100% Inverted Geometry</text>
+          </g>
+        </svg>
+        <div class="svg-caption">Figure 2.2: S<sub>N</sub>2 Concerted Backside Mechanism: approach, trigonal bipyramidal transition state, and umbrella-like Walden inversion.</div>
+      </div>
+    </section>
+
+    <!-- Stereochemistry -->
+    <section class="card">
+      <h2>3. Stereochemistry: 100% Inversion (Walden Inversion)</h2>
+      <p>
+        Because the nucleophile enters exclusively from the back face, the three non-reacting substituents flip over 
+        like an umbrella inverting in a strong gust of wind.
+      </p>
+      <div class="callout">
+        <div class="callout-title">Stereospecificity</div>
+        <p>
+          If the starting material has an <strong>(<em>R</em>)</strong> stereocenter, the product configuration inverts to 
+          <strong>(<em>S</em>)</strong> (assuming CIP priority order is conserved). Optical purity is fully retained (no racemization).
+        </p>
+      </div>
+    </section>
+
+    <!-- Controlling Factors -->
+    <section class="card">
+      <h2>4. Controlling Factors</h2>
+      <div class="grid-2">
+        <div class="factor-pill">
+          <h4>1. Substrate (Steric Hindrance is King)</h4>
+          <p>Reactivity order: <strong>CH<sub>3</sub> > 1° > 2° >> 3° (effectively zero)</strong>. Tertiary substrates are completely blocked from backside attack. Neopentyl is exceptionally sluggish.</p>
+        </div>
+        <div class="factor-pill">
+          <h4>2. Nucleophile Strength &amp; Polarizability</h4>
+          <p>Rate depends directly on [Nu]. Strong, highly polarizable nucleophiles (<strong>I<sup>−</sup>, RS<sup>−</sup>, CN<sup>−</sup>, N<sub>3</sub><sup>−</sup></strong>) accelerate S<sub>N</sub>2.</p>
+        </div>
+        <div class="factor-pill">
+          <h4>3. Leaving Group</h4>
+          <p>Departure occurs simultaneously with attack: <strong>I<sup>−</sup> > Br<sup>−</sup> > Cl<sup>−</sup> &asymp; OTs<sup>−</sup> >> F<sup>−</sup></strong>. OH<sup>−</sup> is too poor to leave unactivated.</p>
+        </div>
+        <div class="factor-pill">
+          <h4>4. Solvent (Polar Aprotic)</h4>
+          <p><strong>Polar aprotic solvents</strong> (DMSO, DMF, Acetone, MeCN) lack H-bonding. They dissolve counter-cations while leaving the nucleophilic anion "naked" and hyper-reactive.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Mechanisms Navigation -->
+    <section class="card">
+      <h2>5. Cross-Mechanism Relationships</h2>
+      <p>Explore related reaction pathways:</p>
+      <ul style="margin: 1rem 1.5rem; line-height: 1.8;">
+        <li><a href="sn1.html"><strong>S<sub>N</sub>1 Mechanism</strong></a> &mdash; Stepwise substitution via carbocation; favored on 3° substrates in polar protic solvents.</li>
+        <li><a href="e2.html"><strong>E2 Mechanism</strong></a> &mdash; Primary competitor of S<sub>N</sub>2 when using strong bases. High temperature and steric bulk favor E2.</li>
+        <li><a href="e1.html"><strong>E1 Mechanism</strong></a> &mdash; Unimolecular elimination favored on 3° substrates with weak bases and heat.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Organic Chemistry Reaction Mechanism Wiki &bull; S<sub>N</sub>2 Mechanism Guide</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organic Chemistry Mechanism Hub — S<sub>N</sub>1, S<sub>N</sub>2, E1, E2</title>
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface-alt: #F1F5F9;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --primary: #1E3A8A;
+      --primary-light: #2563EB;
+      --primary-bg: #EFF6FF;
+      --accent: #0D9488;
+      --accent-bg: #F0FDFA;
+      --border: #E2E8F0;
+      --border-dark: #CBD5E1;
+      --sn1-color: #2563EB;
+      --sn2-color: #0D9488;
+      --e1-color: #D97706;
+      --e2-color: #DC2626;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header & Navigation */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-badge {
+      background: var(--primary);
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 500;
+      padding: 0.5rem 0.875rem;
+      border-radius: 6px;
+      font-size: 0.925rem;
+      transition: all 0.15s ease;
+    }
+
+    .nav-links a:hover {
+      background: var(--surface-alt);
+      color: var(--primary);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 3.5rem 1.5rem 3rem;
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 840px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 2.75rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+      line-height: 1.7;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--primary-bg);
+      color: var(--primary);
+      padding: 0.35rem 0.875rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      border: 1px solid #BFDBFE;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-size: 1.05rem;
+    }
+
+    /* Mechanism Grid */
+    .mechanism-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .mechanism-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mechanism-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    .mechanism-card.sn1::before { background: var(--sn1-color); }
+    .mechanism-card.sn2::before { background: var(--sn2-color); }
+    .mechanism-card.e1::before  { background: var(--e1-color); }
+    .mechanism-card.e2::before  { background: var(--e2-color); }
+
+    .mechanism-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--border-dark);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-code {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .mechanism-card.sn1 .card-code { color: var(--sn1-color); }
+    .mechanism-card.sn2 .card-code { color: var(--sn2-color); }
+    .mechanism-card.e1 .card-code  { color: var(--e1-color); }
+    .mechanism-card.e2 .card-code  { color: var(--e2-color); }
+
+    .type-pill {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .sn1 .type-pill { background: #DBEAFE; color: #1E40AF; }
+    .sn2 .type-pill { background: #CCFBF1; color: #0F766E; }
+    .e1  .type-pill { background: #FEF3C7; color: #92400E; }
+    .e2  .type-pill { background: #FEE2E2; color: #991B1B; }
+
+    .card-subtitle {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .card-body {
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .feature-list {
+      list-style: none;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    .feature-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.35rem 0;
+      border-bottom: 1px dashed #F1F5F9;
+    }
+
+    .feature-label {
+      color: var(--text-muted);
+    }
+
+    .feature-val {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .card-action {
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.15s ease;
+    }
+
+    .sn1 .card-action { background: #EFF6FF; color: var(--sn1-color); }
+    .sn1 .card-action:hover { background: var(--sn1-color); color: white; }
+
+    .sn2 .card-action { background: #F0FDFA; color: var(--sn2-color); }
+    .sn2 .card-action:hover { background: var(--sn2-color); color: white; }
+
+    .e1 .card-action { background: #FFFBEB; color: var(--e1-color); }
+    .e1 .card-action:hover { background: var(--e1-color); color: white; }
+
+    .e2 .card-action { background: #FEF2F2; color: var(--e2-color); }
+    .e2 .card-action:hover { background: var(--e2-color); color: white; }
+
+    /* Comparison Table Section */
+    .table-section {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      padding: 2rem;
+      margin-bottom: 4rem;
+      overflow-x: auto;
+    }
+
+    table.comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.925rem;
+      min-width: 720px;
+    }
+
+    table.comparison-table th,
+    table.comparison-table td {
+      padding: 1rem 1.15rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    table.comparison-table th {
+      background: #F8FAFC;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.95rem;
+      border-bottom: 2px solid var(--border-dark);
+    }
+
+    table.comparison-table tr:hover td {
+      background: #F8FAFC;
+    }
+
+    table.comparison-table td:first-child {
+      font-weight: 600;
+      color: var(--primary);
+      background: #FAFAFA;
+      width: 18%;
+    }
+
+    .tag-badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .tag-yes { background: #DCFCE7; color: #166534; }
+    .tag-no  { background: #F1F5F9; color: #475569; }
+
+    /* Decision Guide Section */
+    .decision-section {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      padding: 2.25rem;
+      margin-bottom: 3rem;
+    }
+
+    .decision-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .decision-card {
+      background: var(--surface-alt);
+      border-radius: 8px;
+      padding: 1.25rem;
+      border-left: 4px solid var(--primary);
+    }
+
+    .decision-card h4 {
+      font-size: 1.05rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .decision-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .decision-card .outcome {
+      margin-top: 0.75rem;
+      padding: 0.4rem 0.6rem;
+      background: white;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      display: inline-block;
+      border: 1px solid var(--border);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--primary-light);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="brand">
+        <span>⚗️ O-Chem Mechanism Hub</span>
+        <span class="brand-badge">Wiki v1.0</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="pages/sn1.html">S<sub>N</sub>1</a></li>
+        <li><a href="pages/sn2.html">S<sub>N</sub>2</a></li>
+        <li><a href="pages/e1.html">E1</a></li>
+        <li><a href="pages/e2.html">E2</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="badge-pill">🎓 Academic Learning Resource</span>
+      <h1>Organic Reaction Mechanisms</h1>
+      <p>
+        Master the four foundational mechanisms of aliphatic substitution and elimination: 
+        <strong>S<sub>N</sub>1, S<sub>N</sub>2, E1, and E2</strong>. Grounded in textbook-level chemical principles 
+        with interactive reaction profiles, curved-arrow diagrams, stereochemical outcomes, and predictive decision frameworks.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Mechanism Cards -->
+    <h2 class="section-title">Core Mechanisms</h2>
+    <p class="section-desc">Explore step-by-step mechanisms, transition states, stereochemistry, and controlling factors.</p>
+
+    <div class="mechanism-grid">
+      <!-- SN1 Card -->
+      <div class="mechanism-card sn1">
+        <div class="card-header">
+          <div class="card-code">S<sub>N</sub>1</div>
+          <span class="type-pill">Substitution</span>
+        </div>
+        <div class="card-subtitle">Unimolecular Nucleophilic Substitution</div>
+        <p class="card-body">
+          A stepwise mechanism initiated by heterolytic cleavage of the C–LG bond, generating a planar carbocation intermediate followed by nucleophilic capture from either face.
+        </p>
+        <ul class="feature-list">
+          <li><span class="feature-label">Kinetics</span> <span class="feature-val">Rate = <em>k</em>[R–LG]</span></li>
+          <li><span class="feature-label">Steps</span> <span class="feature-val">2 (Ionization & Capture)</span></li>
+          <li><span class="feature-label">Intermediate</span> <span class="feature-val"><span class="tag-badge tag-yes">Carbocation (sp<sup>2</sup>)</span></span></li>
+          <li><span class="feature-label">Stereochemistry</span> <span class="feature-val">Racemization (± excess inv.)</span></li>
+          <li><span class="feature-label">Best Substrate</span> <span class="feature-val">3° >> 2° (never 1° or CH<sub>3</sub>)</span></li>
+        </ul>
+        <a href="pages/sn1.html" class="card-action">Study S<sub>N</sub>1 Mechanism →</a>
+      </div>
+
+      <!-- SN2 Card -->
+      <div class="mechanism-card sn2">
+        <div class="card-header">
+          <div class="card-code">S<sub>N</sub>2</div>
+          <span class="type-pill">Substitution</span>
+        </div>
+        <div class="card-subtitle">Bimolecular Nucleophilic Substitution</div>
+        <p class="card-body">
+          A concerted, single-step backside attack where bond formation and bond cleavage occur simultaneously via a trigonal bipyramidal pentacoordinate transition state.
+        </p>
+        <ul class="feature-list">
+          <li><span class="feature-label">Kinetics</span> <span class="feature-val">Rate = <em>k</em>[R–LG][Nu<sup>−</sup>]</span></li>
+          <li><span class="feature-label">Steps</span> <span class="feature-val">1 (Concerted)</span></li>
+          <li><span class="feature-label">Intermediate</span> <span class="feature-val"><span class="tag-badge tag-no">None (1 TS<sup>‡</sup>)</span></span></li>
+          <li><span class="feature-label">Stereochemistry</span> <span class="feature-val">100% Inversion (Walden)</span></li>
+          <li><span class="feature-label">Best Substrate</span> <span class="feature-val">CH<sub>3</sub> > 1° > 2° (never 3°)</span></li>
+        </ul>
+        <a href="pages/sn2.html" class="card-action">Study S<sub>N</sub>2 Mechanism →</a>
+      </div>
+
+      <!-- E1 Card -->
+      <div class="mechanism-card e1">
+        <div class="card-header">
+          <div class="card-code">E1</div>
+          <span class="type-pill">Elimination</span>
+        </div>
+        <div class="card-subtitle">Unimolecular Elimination</div>
+        <p class="card-body">
+          A stepwise elimination sharing the carbocation intermediate with S<sub>N</sub>1. A weak base abstracts a β-proton in the fast second step, generating the most stable Zaitsev alkene.
+        </p>
+        <ul class="feature-list">
+          <li><span class="feature-label">Kinetics</span> <span class="feature-val">Rate = <em>k</em>[R–LG]</span></li>
+          <li><span class="feature-label">Steps</span> <span class="feature-val">2 (Ionization & Deprotonation)</span></li>
+          <li><span class="feature-label">Intermediate</span> <span class="feature-val"><span class="tag-badge tag-yes">Carbocation (sp<sup>2</sup>)</span></span></li>
+          <li><span class="feature-label">Regiochemistry</span> <span class="feature-val">Zaitsev (more substituted)</span></li>
+          <li><span class="feature-label">Competitor</span> <span class="feature-val">Competes with S<sub>N</sub>1 (heat favors E1)</span></li>
+        </ul>
+        <a href="pages/e1.html" class="card-action">Study E1 Mechanism →</a>
+      </div>
+
+      <!-- E2 Card -->
+      <div class="mechanism-card e2">
+        <div class="card-header">
+          <div class="card-code">E2</div>
+          <span class="type-pill">Elimination</span>
+        </div>
+        <div class="card-subtitle">Bimolecular Elimination</div>
+        <p class="card-body">
+          A concerted, single-step reaction in which a strong base abstracts a β-proton simultaneously as the leaving group departs, demanding a strict anti-periplanar 180° geometry.
+        </p>
+        <ul class="feature-list">
+          <li><span class="feature-label">Kinetics</span> <span class="feature-val">Rate = <em>k</em>[R–LG][Base]</span></li>
+          <li><span class="feature-label">Steps</span> <span class="feature-val">1 (Concerted)</span></li>
+          <li><span class="feature-label">Intermediate</span> <span class="feature-val"><span class="tag-badge tag-no">None (1 TS<sup>‡</sup>)</span></span></li>
+          <li><span class="feature-label">Stereochemistry</span> <span class="feature-val">Anti-periplanar (180° diaxial)</span></li>
+          <li><span class="feature-label">Regiochemistry</span> <span class="feature-val">Zaitsev (small base) / Hofmann (bulky)</span></li>
+        </ul>
+        <a href="pages/e2.html" class="card-action">Study E2 Mechanism →</a>
+      </div>
+    </div>
+
+    <!-- Master Comparison Table -->
+    <h2 class="section-title">Comprehensive Comparison Table</h2>
+    <p class="section-desc">Side-by-side analysis of kinetics, reaction coordinates, requirements, and selectivity.</p>
+
+    <div class="table-section">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th style="color: var(--sn1-color);">S<sub>N</sub>1</th>
+            <th style="color: var(--sn2-color);">S<sub>N</sub>2</th>
+            <th style="color: var(--e1-color);">E1</th>
+            <th style="color: var(--e2-color);">E2</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Molecularity</td>
+            <td>Unimolecular</td>
+            <td>Bimolecular</td>
+            <td>Unimolecular</td>
+            <td>Bimolecular</td>
+          </tr>
+          <tr>
+            <td>Rate Law</td>
+            <td>Rate = <em>k</em>[R–LG]</td>
+            <td>Rate = <em>k</em>[R–LG][Nu<sup>−</sup>]</td>
+            <td>Rate = <em>k</em>[R–LG]</td>
+            <td>Rate = <em>k</em>[R–LG][Base]</td>
+          </tr>
+          <tr>
+            <td>Number of Steps</td>
+            <td>2 steps (Ionization → Attack)</td>
+            <td>1 step (Concerted backside)</td>
+            <td>2 steps (Ionization → Deprotonation)</td>
+            <td>1 step (Concerted elimination)</td>
+          </tr>
+          <tr>
+            <td>Intermediates</td>
+            <td><span class="tag-badge tag-yes">Carbocation (sp<sup>2</sup> planar)</span></td>
+            <td><span class="tag-badge tag-no">None (Trigonal bipyramidal TS<sup>‡</sup>)</span></td>
+            <td><span class="tag-badge tag-yes">Carbocation (sp<sup>2</sup> planar)</span></td>
+            <td><span class="tag-badge tag-no">None (Coplanar TS<sup>‡</sup>)</span></td>
+          </tr>
+          <tr>
+            <td>Substrate Reactivity</td>
+            <td>3° >> 2° > 1° (unreactive)</td>
+            <td>CH<sub>3</sub> > 1° > 2° >> 3° (blocked)</td>
+            <td>3° >> 2° > 1° (unreactive)</td>
+            <td>3° > 2° > 1°</td>
+          </tr>
+          <tr>
+            <td>Nucleophile / Base</td>
+            <td>Weak Nu acceptable (H<sub>2</sub>O, ROH)</td>
+            <td>Strong, polarizable Nu (I<sup>−</sup>, CN<sup>−</sup>, RS<sup>−</sup>)</td>
+            <td>Weak base (H<sub>2</sub>O, EtOH)</td>
+            <td>Strong base (OH<sup>−</sup>, EtO<sup>−</sup>, <em>t</em>-BuO<sup>−</sup>)</td>
+          </tr>
+          <tr>
+            <td>Optimal Solvent</td>
+            <td>Polar Protic (H<sub>2</sub>O, MeOH, EtOH)</td>
+            <td>Polar Aprotic (DMSO, DMF, Acetone)</td>
+            <td>Polar Protic (H<sub>2</sub>O, EtOH)</td>
+            <td>Polar Aprotic or Protic (w/ strong base)</td>
+          </tr>
+          <tr>
+            <td>Stereochemistry</td>
+            <td>Racemization (slight excess inversion)</td>
+            <td>100% Inversion (Walden Inversion)</td>
+            <td>Non-stereospecific (<em>E</em>/<em>Z</em> mixture)</td>
+            <td>Anti-periplanar (stereospecific)</td>
+          </tr>
+          <tr>
+            <td>Regiochemistry</td>
+            <td>N/A (substitution)</td>
+            <td>N/A (substitution)</td>
+            <td>Zaitsev rule (more stable alkene)</td>
+            <td>Zaitsev (small base) / Hofmann (bulky base)</td>
+          </tr>
+          <tr>
+            <td>Rearrangements?</td>
+            <td>Possible (hydride / alkyl shifts)</td>
+            <td>Never (no carbocation)</td>
+            <td>Possible (hydride / alkyl shifts)</td>
+            <td>Never (no carbocation)</td>
+          </tr>
+          <tr>
+            <td>Temperature Effect</td>
+            <td>Favored at low/moderate temp</td>
+            <td>Favored at low/moderate temp</td>
+            <td>High temperature favors E1 over S<sub>N</sub>1</td>
+            <td>High temperature favors E2 over S<sub>N</sub>2</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mechanism Decision Flow -->
+    <h2 class="section-title">Reaction Prediction Decision Guide</h2>
+    <p class="section-desc">Follow the structural logic of the substrate and reagents to identify the dominant reaction pathway.</p>
+
+    <div class="decision-section">
+      <div class="decision-grid">
+        <div class="decision-card">
+          <h4>1. Methyl Substrate (CH<sub>3</sub>–LG)</h4>
+          <p>Backside attack is completely unhindered. No β-hydrogen exists for elimination, and methyl carbocations cannot form.</p>
+          <div class="outcome" style="color: var(--sn2-color);">Outcome: S<sub>N</sub>2 exclusively</div>
+        </div>
+
+        <div class="decision-card">
+          <h4>2. Primary Substrate (1°, RCH<sub>2</sub>–LG)</h4>
+          <p>Low steric hindrance favors backside attack. S<sub>N</sub>2 dominates unless a sterically hindered strong base (e.g., KO<em>t</em>Bu) forces E2.</p>
+          <div class="outcome" style="color: var(--sn2-color);">Strong Nu → S<sub>N</sub>2</div>
+          <div class="outcome" style="color: var(--e2-color); margin-left: 0.5rem;">Bulky Base → E2</div>
+        </div>
+
+        <div class="decision-card">
+          <h4>3. Secondary Substrate (2°, R<sub>2</sub>CH–LG)</h4>
+          <p>Borderline zone where all four pathways can compete. Look at base strength, nucleophile nature, solvent, and temperature.</p>
+          <div class="outcome" style="color: var(--e2-color);">Strong Base → E2</div>
+          <div class="outcome" style="color: var(--sn2-color); margin-left: 0.25rem;">Weak Base / Strong Nu → S<sub>N</sub>2</div>
+          <div class="outcome" style="color: var(--sn1-color); margin-top: 0.5rem;">Weak Nu / Protic → S<sub>N</sub>1 / E1</div>
+        </div>
+
+        <div class="decision-card">
+          <h4>4. Tertiary Substrate (3°, R<sub>3</sub>C–LG)</h4>
+          <p>Backside attack is sterically blocked (S<sub>N</sub>2 impossible). Strong bases produce E2; weak nucleophiles/bases yield S<sub>N</sub>1 + E1.</p>
+          <div class="outcome" style="color: var(--e2-color);">Strong Base → E2</div>
+          <div class="outcome" style="color: var(--sn1-color); margin-left: 0.5rem;">Weak Nu/Base → S<sub>N</sub>1 (E1 w/ heat)</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>Organic Chemistry Reaction Mechanism Wiki &amp; Hub &bull; Grounded in Clayden, McMurry, and Wade.</p>
+    <p style="margin-top: 0.5rem;">
+      <a href="pages/sn1.html">S<sub>N</sub>1 Page</a> &bull; 
+      <a href="pages/sn2.html">S<sub>N</sub>2 Page</a> &bull; 
+      <a href="pages/e1.html">E1 Page</a> &bull; 
+      <a href="pages/e2.html">E2 Page</a>
+    </p>
+  </footer>
+
+</body>
+</html>

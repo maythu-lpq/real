@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E2 Mechanism — Bimolecular Elimination</title>
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface-alt: #F1F5F9;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --primary: #1E3A8A;
+      --primary-light: #DC2626;
+      --accent: #EF4444;
+      --border: #E2E8F0;
+      --border-dark: #CBD5E1;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 500;
+      padding: 0.45rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: all 0.15s ease;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      background: #FEE2E2;
+      color: var(--primary-light);
+      font-weight: 600;
+    }
+
+    .page-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    .breadcrumb {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .breadcrumb a { color: var(--primary-light); text-decoration: none; }
+
+    .header-box { margin-bottom: 2rem; }
+    .header-box h1 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .header-box .lead {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card h2 {
+      font-size: 1.45rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #FEE2E2;
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      color: var(--text);
+      margin: 1.25rem 0 0.5rem;
+    }
+
+    .svg-container {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .svg-caption {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
+    .callout {
+      background: #FEF2F2;
+      border-left: 4px solid var(--primary-light);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      color: #991B1B;
+      margin-bottom: 0.25rem;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.925rem;
+    }
+
+    table.data-table th, table.data-table td {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    table.data-table th {
+      background: var(--surface-alt);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .factor-pill {
+      background: var(--surface-alt);
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .factor-pill h4 {
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+      font-size: 1rem;
+    }
+
+    .factor-pill p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .source-cite {
+      background: #F1F5F9;
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      display: inline-block;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="../index.html" class="brand">
+        <span>← Mechanism Hub</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="sn1.html">S<sub>N</sub>1</a></li>
+        <li><a href="sn2.html">S<sub>N</sub>2</a></li>
+        <li><a href="e1.html">E1</a></li>
+        <li><a href="e2.html" class="active">E2</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="breadcrumb">
+      <a href="../index.html">Home</a> &rsaquo; <span>Mechanisms</span> &rsaquo; <span>E2</span>
+    </div>
+
+    <div class="header-box">
+      <div class="source-cite">📖 Grounded Knowledge: <code>wiki/e2.md</code></div>
+      <h1>E2 Mechanism</h1>
+      <p class="lead">Bimolecular Elimination &bull; Concerted Transition State &bull; Anti-Periplanar Geometry</p>
+    </div>
+
+    <!-- Overview & Kinetics -->
+    <section class="card">
+      <h2>1. Overview &amp; Kinetics</h2>
+      <p>
+        The <strong>E2</strong> (Elimination, <strong>Bimolecular</strong>) reaction is a single-step, concerted elimination. A strong base removes a proton from the β-carbon while the leaving group simultaneously departs from the α-carbon, directly forming a carbon–carbon <strong>π bond</strong> with no intermediate carbocation.
+      </p>
+
+      <div class="callout">
+        <div class="callout-title">Second-Order Kinetics</div>
+        <p><strong>Rate = <em>k</em>[Substrate][Base]</strong> &mdash; Bimolecular rate law. Doubling either the substrate or base concentration doubles the overall rate. Increasing base concentration strongly promotes E2 over unimolecular pathways (E1/S<sub>N</sub>1).</p>
+      </div>
+
+      <!-- Reaction Coordinate SVG -->
+      <div class="svg-container">
+        <svg viewBox="0 0 760 300" width="100%" height="260" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+            </marker>
+          </defs>
+          <line x1="60" y1="260" x2="720" y2="260" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)" />
+          <line x1="60" y1="260" x2="60" y2="20" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)" />
+          
+          <text x="710" y="285" font-size="12" fill="#64748B" text-anchor="end" font-weight="600">Reaction Coordinate →</text>
+          <text x="25" y="30" font-size="12" fill="#64748B" transform="rotate(-90 25,30)" font-weight="600">Free Energy (ΔG) →</text>
+
+          <!-- Single Smooth Barrier Curve -->
+          <path d="M 60 210 C 180 210, 280 40, 390 40 C 500 40, 580 230, 700 230" 
+                fill="none" stroke="#DC2626" stroke-width="3.5" />
+
+          <!-- Reactants -->
+          <circle cx="90" cy="210" r="4" fill="#1E3A8A" />
+          <text x="90" y="235" font-size="13" font-weight="700" fill="#1E3A8A">Base + H–C<sub>β</sub>–C<sub>α</sub>–LG</text>
+          <text x="90" y="250" font-size="11" fill="#64748B">Reactants</text>
+
+          <!-- Single TS -->
+          <circle cx="390" cy="40" r="5" fill="#DC2626" />
+          <text x="390" y="25" font-size="13" font-weight="700" fill="#DC2626" text-anchor="middle">TS<sup>‡</sup> (Concerted Barrier)</text>
+          <text x="390" y="65" font-size="12" fill="#991B1B" font-weight="600" text-anchor="middle">[B<sup>δ−</sup>···H···C=C···LG<sup>δ−</sup>]<sup>‡</sup></text>
+          <text x="390" y="80" font-size="11" fill="#64748B" text-anchor="middle">Anti-periplanar coplanar transition state</text>
+
+          <!-- Products -->
+          <circle cx="680" cy="230" r="4" fill="#1E3A8A" />
+          <text x="680" y="250" font-size="13" font-weight="700" fill="#1E3A8A">Alkene + B–H + LG<sup>−</sup></text>
+          <text x="680" y="265" font-size="11" fill="#64748B">Thermodynamically Favored Products</text>
+
+          <!-- Activation Energy -->
+          <line x1="90" y1="210" x2="390" y2="210" stroke="#CBD5E1" stroke-dasharray="4" />
+          <line x1="390" y1="210" x2="390" y2="48" stroke="#DC2626" stroke-width="1.5" />
+          <text x="400" y="135" font-size="12" fill="#DC2626" font-weight="600">ΔG<sup>‡</sup> (E<sub>a</sub>)</text>
+        </svg>
+        <div class="svg-caption">Figure 4.1: E2 Reaction Coordinate Energy Diagram demonstrating a single concerted activation hill without intermediate species.</div>
+      </div>
+    </section>
+
+    <!-- Concerted Mechanism & Anti-Periplanar Geometry SVG -->
+    <section class="card">
+      <h2>2. Concerted Mechanism &amp; The Anti-Periplanar Rule</h2>
+      <p>
+        For maximum orbital overlap between the breaking C<sub>β</sub>–H σ bond and the developing π system, the 
+        β-hydrogen and the leaving group must lie in the same plane with a <strong>dihedral angle of 180°</strong> (<strong>anti-periplanar</strong>).
+      </p>
+
+      <!-- SVG Mechanism & Stereochemistry Diagram -->
+      <div class="svg-container">
+        <svg viewBox="0 0 820 280" width="100%" height="270" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="curv-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#DC2626" />
+            </marker>
+          </defs>
+
+          <!-- PANEL A: Concerted Curved Arrows -->
+          <g transform="translate(10, 20)">
+            <rect width="380" height="235" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+            <text x="20" y="30" font-size="12" font-weight="700" fill="#1E3A8A">A. Three Concerted Electron Movements</text>
+
+            <!-- Strong Base -->
+            <text x="40" y="80" font-size="15" font-weight="700" fill="#DC2626">B:<sup>−</sup></text>
+            <!-- Arrow 1: Base to H -->
+            <path d="M 65 75 Q 95 80 105 105" fill="none" stroke="#DC2626" stroke-width="2.5" marker-end="url(#curv-red)" />
+
+            <!-- Anti-periplanar Substrate -->
+            <!-- β-H pointing up -->
+            <text x="110" y="115" font-size="16" font-family="monospace" font-weight="700" fill="#0F172A">H</text>
+            <line x1="117" y1="120" x2="117" y2="155" stroke="#0F172A" stroke-width="2.5" />
+            <text x="110" y="175" font-size="16" font-family="monospace" font-weight="700" fill="#0F172A">C<sub>β</sub></text>
+
+            <!-- Arrow 2: C-H bond to C-C bond -->
+            <path d="M 120 135 Q 145 150 150 165" fill="none" stroke="#DC2626" stroke-width="2.5" marker-end="url(#curv-red)" />
+
+            <!-- C-C bond -->
+            <line x1="130" y1="170" x2="185" y2="170" stroke="#0F172A" stroke-width="2.5" />
+
+            <text x="190" y="175" font-size="16" font-family="monospace" font-weight="700" fill="#0F172A">C<sub>α</sub></text>
+            <!-- Leaving group pointing down (180° anti) -->
+            <line x1="197" y1="180" x2="197" y2="215" stroke="#0F172A" stroke-width="2.5" />
+            <text x="190" y="235" font-size="16" font-family="monospace" font-weight="700" fill="#DC2626">LG</text>
+
+            <!-- Arrow 3: C-LG bond to LG -->
+            <path d="M 197 195 Q 215 200 215 220" fill="none" stroke="#DC2626" stroke-width="2.5" marker-end="url(#curv-red)" />
+
+            <!-- Labels -->
+            <text x="140" y="100" font-size="10" fill="#64748B">1. Base abstracts β-H</text>
+            <text x="155" y="145" font-size="10" fill="#64748B">2. π bond forms</text>
+            <text x="225" y="195" font-size="10" fill="#64748B">3. LG departs</text>
+          </g>
+
+          <!-- PANEL B: Anti-Periplanar & Cyclohexane Diaxial Requirement -->
+          <g transform="translate(410, 20)">
+            <rect width="395" height="235" rx="8" fill="#FEF2F2" stroke="#FECACA" />
+            <text x="20" y="30" font-size="12" font-weight="700" fill="#991B1B">B. Geometric Requirement: 180° Dihedral Angle</text>
+
+            <!-- Newman Projection representation -->
+            <circle cx="110" cy="130" r="40" fill="#FFFFFF" stroke="#0F172A" stroke-width="2.5" />
+            <!-- Front Y bonds -->
+            <line x1="110" y1="130" x2="110" y2="70" stroke="#0F172A" stroke-width="2.5" />
+            <text x="105" y="65" font-size="14" font-weight="700" fill="#0F172A">H (β)</text>
+
+            <line x1="110" y1="130" x2="80" y2="155" stroke="#0F172A" stroke-width="2" />
+            <text x="65" y="165" font-size="11" fill="#0F172A">R<sub>1</sub></text>
+
+            <line x1="110" y1="130" x2="140" y2="155" stroke="#0F172A" stroke-width="2" />
+            <text x="145" y="165" font-size="11" fill="#0F172A">R<sub>2</sub></text>
+
+            <!-- Back carbon bonds (extending outside circle) -->
+            <line x1="110" y1="170" x2="110" y2="205" stroke="#DC2626" stroke-width="2.5" />
+            <text x="100" y="225" font-size="14" font-weight="700" fill="#DC2626">LG (α)</text>
+
+            <line x1="80" y1="105" x2="65" y2="95" stroke="#0F172A" stroke-width="2" />
+            <text x="50" y="95" font-size="11" fill="#0F172A">R<sub>3</sub></text>
+
+            <line x1="140" y1="105" x2="155" y2="95" stroke="#0F172A" stroke-width="2" />
+            <text x="160" y="95" font-size="11" fill="#0F172A">R<sub>4</sub></text>
+
+            <!-- 180 label -->
+            <text x="195" y="125" font-size="12" font-weight="700" fill="#991B1B">Dihedral Angle = 180°</text>
+            <text x="195" y="145" font-size="11" fill="#64748B">&bull; Anti-periplanar alignment</text>
+            <text x="195" y="165" font-size="11" fill="#64748B">&bull; In cyclohexanes: MUST be</text>
+            <text x="205" y="185" font-size="11" font-weight="700" fill="#0F172A">trans-diaxial (both axial)</text>
+          </g>
+        </svg>
+        <div class="svg-caption">Figure 4.2: E2 Concerted Mechanism: simultaneous 3-center electron transfer (Panel A) and 180° anti-periplanar Newman conformation (Panel B).</div>
+      </div>
+    </section>
+
+    <!-- Regioselectivity: Zaitsev vs Hofmann -->
+    <section class="card">
+      <h2>3. Regioselectivity: Zaitsev vs. Hofmann Elimination</h2>
+      <p>
+        When a substrate has non-equivalent β-hydrogens, the identity of the base dictates which alkene isomer predominates:
+      </p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Base Steric Bulk</th>
+            <th>Representative Bases</th>
+            <th>Dominant Product</th>
+            <th>Governing Principle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Small / Unhindered</strong></td>
+            <td>OH<sup>−</sup>, NaOEt, NaOMe</td>
+            <td><strong style="color: #166534;">Zaitsev Product</strong> (more substituted alkene)</td>
+            <td>Thermodynamic stability of alkene (hyperconjugation) controls lower TS energy.</td>
+          </tr>
+          <tr>
+            <td><strong>Bulky / Hindered</strong></td>
+            <td>KO<em>t</em>Bu, LDA, DBU</td>
+            <td><strong style="color: #991B1B;">Hofmann Product</strong> (less substituted alkene)</td>
+            <td>Steric crowding prevents base from accessing internal β-H; less hindered terminal β-H is deprotonated.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Controlling Factors & SN2 vs E2 -->
+    <section class="card">
+      <h2>4. Controlling Factors &amp; S<sub>N</sub>2 vs. E2 Competition</h2>
+      <div class="grid-2">
+        <div class="factor-pill">
+          <h4>1. Substrate Class</h4>
+          <p>Reactivity: <strong>3° > 2° > 1°</strong>. Bulkier substrates strongly suppress S<sub>N</sub>2 backside attack, directing strong bases exclusively to E2.</p>
+        </div>
+        <div class="factor-pill">
+          <h4>2. Base Nature</h4>
+          <p>Requires a <strong>strong base</strong> (pKa of conjugate acid > 14). Bulky bases (KO<em>t</em>Bu) completely shut down S<sub>N</sub>2 even on primary substrates.</p>
+        </div>
+        <div class="factor-pill">
+          <h4>3. Temperature</h4>
+          <p><strong>High temperature (&Delta;)</strong> strongly favors E2 over S<sub>N</sub>2 because elimination creates three particles from two (&Delta;S > 0).</p>
+        </div>
+        <div class="factor-pill">
+          <h4>4. Leaving Group &amp; Geometry</h4>
+          <p>Good leaving groups (I<sup>−</sup>, Br<sup>−</sup>, OTs<sup>−</sup>) are required. In rings, the reaction cannot occur unless H and LG can achieve a <strong>diaxial</strong> conformation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Mechanisms Navigation -->
+    <section class="card">
+      <h2>5. Cross-Mechanism Relationships</h2>
+      <p>Explore connections to other mechanisms:</p>
+      <ul style="margin: 1rem 1.5rem; line-height: 1.8;">
+        <li><a href="sn2.html"><strong>S<sub>N</sub>2 Mechanism</strong></a> &mdash; Main competitor with strong reagents. Small nucleophiles, 1° substrates, and lower temperatures favor S<sub>N</sub>2.</li>
+        <li><a href="e1.html"><strong>E1 Mechanism</strong></a> &mdash; Unimolecular elimination with weak bases via carbocations. Non-stereospecific and prone to rearrangements.</li>
+        <li><a href="sn1.html"><strong>S<sub>N</sub>1 Mechanism</strong></a> &mdash; Stepwise substitution via carbocation with weak nucleophiles.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Organic Chemistry Reaction Mechanism Wiki &bull; E2 Mechanism Guide</p>
+  </footer>
+</body>
+</html>

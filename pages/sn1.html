@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S<sub>N</sub>1 Mechanism — Unimolecular Nucleophilic Substitution</title>
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface-alt: #F1F5F9;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --primary: #1E3A8A;
+      --primary-light: #2563EB;
+      --accent: #3B82F6;
+      --border: #E2E8F0;
+      --border-dark: #CBD5E1;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 500;
+      padding: 0.45rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: all 0.15s ease;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      background: #EFF6FF;
+      color: var(--primary-light);
+      font-weight: 600;
+    }
+
+    .page-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    .breadcrumb {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .breadcrumb a { color: var(--primary-light); text-decoration: none; }
+
+    .header-box {
+      margin-bottom: 2rem;
+    }
+
+    .header-box h1 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .header-box .lead {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card h2 {
+      font-size: 1.45rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #EFF6FF;
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      color: var(--text);
+      margin: 1.25rem 0 0.5rem;
+    }
+
+    .svg-container {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .svg-caption {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
+    .callout {
+      background: #EFF6FF;
+      border-left: 4px solid var(--primary-light);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.925rem;
+    }
+
+    table.data-table th, table.data-table td {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    table.data-table th {
+      background: var(--surface-alt);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .factor-pill {
+      background: var(--surface-alt);
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .factor-pill h4 {
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+      font-size: 1rem;
+    }
+
+    .factor-pill p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .source-cite {
+      background: #F1F5F9;
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      display: inline-block;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="../index.html" class="brand">
+        <span>← Mechanism Hub</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="sn1.html" class="active">S<sub>N</sub>1</a></li>
+        <li><a href="sn2.html">S<sub>N</sub>2</a></li>
+        <li><a href="e1.html">E1</a></li>
+        <li><a href="e2.html">E2</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="breadcrumb">
+      <a href="../index.html">Home</a> &rsaquo; <span>Mechanisms</span> &rsaquo; <span>S<sub>N</sub>1</span>
+    </div>
+
+    <div class="header-box">
+      <div class="source-cite">📖 Grounded Knowledge: <code>wiki/sn1.md</code></div>
+      <h1>S<sub>N</sub>1 Mechanism</h1>
+      <p class="lead">Unimolecular Nucleophilic Substitution &bull; Stepwise Ionization &bull; Planar Intermediate</p>
+    </div>
+
+    <!-- Overview & Kinetics -->
+    <section class="card">
+      <h2>1. Overview &amp; Kinetics</h2>
+      <p>
+        The <strong>S<sub>N</sub>1</strong> (Substitution, Nucleophilic, <strong>Unimolecular</strong>) reaction is a two-step substitution process that proceeds via a discrete <strong>carbocation intermediate</strong>. Because the initial heterolytic bond cleavage (ionization) is the slowest event, the reaction rate is strictly governed by substrate concentration alone.
+      </p>
+
+      <div class="callout">
+        <div class="callout-title">Rate Law &amp; Molecularity</div>
+        <p><strong>Rate = <em>k</em>[Substrate]</strong> &mdash; First-order overall. Changing the concentration or nucleophilic power of the incoming nucleophile does <strong>not</strong> affect the reaction rate.</p>
+      </div>
+
+      <!-- Reaction Coordinate SVG -->
+      <div class="svg-container">
+        <svg viewBox="0 0 760 300" width="100%" height="260" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+            </marker>
+          </defs>
+          <!-- Axes -->
+          <line x1="60" y1="260" x2="720" y2="260" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)" />
+          <line x1="60" y1="260" x2="60" y2="20" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)" />
+          
+          <text x="710" y="285" font-size="12" fill="#64748B" text-anchor="end" font-weight="600">Reaction Coordinate →</text>
+          <text x="25" y="30" font-size="12" fill="#64748B" transform="rotate(-90 25,30)" font-weight="600">Free Energy (ΔG) →</text>
+
+          <!-- Energy Curve -->
+          <path d="M 60 210 C 130 210, 180 50, 240 50 C 300 50, 330 160, 390 160 C 450 160, 480 110, 540 110 C 600 110, 640 230, 700 230" 
+                fill="none" stroke="#2563EB" stroke-width="3.5" />
+
+          <!-- Points & Labels -->
+          <!-- Reactants -->
+          <circle cx="80" cy="210" r="4" fill="#1E3A8A" />
+          <text x="80" y="235" font-size="13" font-weight="700" fill="#1E3A8A">R–LG</text>
+          <text x="80" y="250" font-size="11" fill="#64748B">Reactant</text>
+
+          <!-- TS1 -->
+          <circle cx="240" cy="50" r="5" fill="#DC2626" />
+          <text x="240" y="35" font-size="13" font-weight="700" fill="#DC2626" text-anchor="middle">TS1<sup>‡</sup> (Slow / RDS)</text>
+          <text x="240" y="70" font-size="11" fill="#64748B" text-anchor="middle">[R<sup>δ+</sup>···LG<sup>δ−</sup>]</text>
+
+          <!-- Carbocation Intermediate -->
+          <circle cx="390" cy="160" r="5" fill="#0D9488" />
+          <text x="390" y="185" font-size="13" font-weight="700" fill="#0D9488" text-anchor="middle">R<sup>+</sup> + LG<sup>−</sup></text>
+          <text x="390" y="200" font-size="11" fill="#0F766E" text-anchor="middle">Planar Carbocation Intermediate</text>
+
+          <!-- TS2 -->
+          <circle cx="540" cy="110" r="5" fill="#D97706" />
+          <text x="540" y="95" font-size="13" font-weight="700" fill="#D97706" text-anchor="middle">TS2<sup>‡</sup> (Fast)</text>
+          <text x="540" y="130" font-size="11" fill="#64748B" text-anchor="middle">[R<sup>δ+</sup>···Nu<sup>δ−</sup>]</text>
+
+          <!-- Product -->
+          <circle cx="680" cy="230" r="4" fill="#1E3A8A" />
+          <text x="680" y="250" font-size="13" font-weight="700" fill="#1E3A8A">R–Nu + LG<sup>−</sup></text>
+          <text x="680" y="265" font-size="11" fill="#64748B">Products</text>
+
+          <!-- Activation Energy Bracket -->
+          <line x1="80" y1="210" x2="240" y2="210" stroke="#CBD5E1" stroke-dasharray="4" />
+          <line x1="240" y1="210" x2="240" y2="58" stroke="#DC2626" stroke-width="1.5" />
+          <text x="248" y="140" font-size="12" fill="#DC2626" font-weight="600">ΔG<sup>‡</sup><sub>1</sub> (E<sub>a, RDS</sub>)</text>
+        </svg>
+        <div class="svg-caption">Figure 1.1: S<sub>N</sub>1 Reaction Coordinate Energy Diagram showcasing two transition states and the intermediate carbocation trough.</div>
+      </div>
+    </section>
+
+    <!-- Step-by-Step Mechanism with Curved Arrows SVG -->
+    <section class="card">
+      <h2>2. Step-by-Step Mechanism</h2>
+
+      <h3>Step 1: Heterolytic Bond Cleavage (Rate-Determining Step)</h3>
+      <p>
+        The leaving group departs with both bonding electrons. This heterolysis rehybridizes the central carbon from 
+        tetrahedral <strong>sp<sup>3</sup></strong> to trigonal planar <strong>sp<sup>2</sup></strong> with an unhybridized, empty <em>p</em> orbital.
+      </p>
+
+      <h3>Step 2: Nucleophilic Attack on Planar Carbocation (Fast Step)</h3>
+      <p>
+        The incoming nucleophile attacks the planar cation. Because both faces of the empty <em>p</em> orbital are exposed, attack occurs from above or below, leading to stereochemical racemization.
+      </p>
+
+      <!-- Mechanism Curved Arrows SVG -->
+      <div class="svg-container">
+        <svg viewBox="0 0 800 280" width="100%" height="260" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="curved-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#DC2626" />
+            </marker>
+            <marker id="curved-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB" />
+            </marker>
+          </defs>
+
+          <!-- STEP 1 DIAGRAM -->
+          <rect x="20" y="20" width="340" height="235" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+          <text x="40" y="45" font-size="13" font-weight="700" fill="#1E3A8A">STEP 1: C–LG Ionization (Slow)</text>
+          
+          <!-- Substrate Molecule: (CH3)3C-Br -->
+          <text x="60" y="125" font-size="16" font-family="monospace" fill="#0F172A">
+            CH<sub>3</sub><br>
+            |<br>
+            H<sub>3</sub>C &mdash; C &mdash; <tspan font-weight="700" fill="#DC2626">Br</tspan><br>
+            |<br>
+            CH<sub>3</sub>
+          </text>
+
+          <!-- Curved Arrow from C-Br bond to Br -->
+          <path d="M 170 120 Q 185 95 195 110" fill="none" stroke="#DC2626" stroke-width="2.5" marker-end="url(#curved-red)" />
+
+          <!-- Reaction Arrow -->
+          <line x1="225" y1="130" x2="265" y2="130" stroke="#1E3A8A" stroke-width="2" marker-end="url(#arrow)" />
+          <text x="245" y="120" font-size="11" fill="#1E3A8A" text-anchor="middle" font-weight="600">slow</text>
+
+          <!-- Products of Step 1 -->
+          <text x="285" y="115" font-size="15" font-family="monospace" fill="#0D9488" font-weight="700">(CH<sub>3</sub>)<sub>3</sub>C<sup>+</sup></text>
+          <text x="285" y="145" font-size="14" font-family="monospace" fill="#DC2626">+ :Br<sup>−</sup></text>
+
+          <!-- STEP 2 DIAGRAM -->
+          <rect x="380" y="20" width="395" height="235" rx="8" fill="#F8FAFC" stroke="#E2E8F0" />
+          <text x="400" y="45" font-size="13" font-weight="700" fill="#1E3A8A">STEP 2: Nucleophilic Capture (Fast)</text>
+
+          <!-- Planar Carbocation representation with p orbital lobe -->
+          <text x="470" y="135" font-size="18" font-family="monospace" font-weight="700" fill="#0D9488">C<sup>+</sup></text>
+          <line x1="430" y1="130" x2="465" y2="130" stroke="#0F172A" stroke-width="2" />
+          <text x="400" y="135" font-size="12" fill="#0F172A">R<sub>1</sub></text>
+          
+          <line x1="480" y1="110" x2="495" y2="90" stroke="#0F172A" stroke-width="2" />
+          <text x="495" y="85" font-size="12" fill="#0F172A">R<sub>2</sub></text>
+
+          <line x1="480" y1="150" x2="495" y2="170" stroke="#0F172A" stroke-width="2" />
+          <text x="495" y="185" font-size="12" fill="#0F172A">R<sub>3</sub></text>
+
+          <!-- Empty p orbital lobes -->
+          <ellipse cx="478" cy="100" rx="9" ry="22" fill="#DBEAFE" stroke="#3B82F6" stroke-dasharray="2" />
+          <ellipse cx="478" cy="160" rx="9" ry="22" fill="#DBEAFE" stroke="#3B82F6" stroke-dasharray="2" />
+
+          <!-- Top Attack -->
+          <text x="560" y="75" font-size="13" font-weight="700" fill="#2563EB">Nu:<sup>−</sup> (Top Attack)</text>
+          <path d="M 555 75 Q 510 70 488 95" fill="none" stroke="#2563EB" stroke-width="2" marker-end="url(#curved-blue)" />
+          <text x="670" y="85" font-size="11" fill="#166534" font-weight="600">→ Retention (50%)</text>
+
+          <!-- Bottom Attack -->
+          <text x="560" y="195" font-size="13" font-weight="700" fill="#2563EB">Nu:<sup>−</sup> (Bottom Attack)</text>
+          <path d="M 555 195 Q 510 200 488 170" fill="none" stroke="#2563EB" stroke-width="2" marker-end="url(#curved-blue)" />
+          <text x="670" y="185" font-size="11" fill="#166534" font-weight="600">→ Inversion (50%)</text>
+        </svg>
+        <div class="svg-caption">Figure 1.2: Curved arrow electron flow in S<sub>N</sub>1: Step 1 C–Br heterolysis, and Step 2 dual-face nucleophilic attack.</div>
+      </div>
+    </section>
+
+    <!-- Stereochemistry -->
+    <section class="card">
+      <h2>3. Stereochemistry: Racemization vs. Ion-Pair Shielding</h2>
+      <p>
+        Because the intermediate carbocation is <strong>sp<sup>2</sup> hybridized and planar</strong>, nucleophiles attack both faces with theoretically identical probabilities, creating a 50:50 mixture of enantiomers (<strong>racemization</strong>) and loss of optical activity.
+      </p>
+
+      <div class="callout">
+        <div class="callout-title">The Ion-Pair Reality (Partial Inversion Excess)</div>
+        <p>
+          In solution, the departing leaving group remains briefly in an <em>intimate ion pair</em> ([R<sup>+</sup> &bull;&bull;&bull; LG<sup>−</sup>]), partially shielding the departure face. The nucleophile preferentially attacks the opposite side, typically resulting in <strong>55% to 70% inversion</strong> and <strong>30% to 45% retention</strong>.
+        </p>
+      </div>
+    </section>
+
+    <!-- Controlling Factors -->
+    <section class="card">
+      <h2>4. Controlling Factors</h2>
+      <div class="grid-2">
+        <div class="factor-pill">
+          <h4>1. Substrate Class</h4>
+          <p>Requires carbocation stabilization via hyperconjugation &amp; induction: <strong>3° >> 2°</strong>. Methyl and primary substrates never undergo S<sub>N</sub>1.</p>
+        </div>
+        <div class="factor-pill">
+          <h4>2. Nucleophile Strength</h4>
+          <p>Does not participate in the rate-determining step. Weak, neutral nucleophiles (H<sub>2</sub>O, ROH) are optimal and prevent competing E2.</p>
+        </div>
+        <div class="factor-pill">
+          <h4>3. Leaving Group Quality</h4>
+          <p>Must be stable as an anion (weak base). Good leaving groups: <strong>I<sup>−</sup> > Br<sup>−</sup> > Cl<sup>−</sup> &asymp; OTs<sup>−</sup></strong>. OH<sup>−</sup> must be protonated to H<sub>2</sub>O.</p>
+        </div>
+        <div class="factor-pill">
+          <h4>4. Solvent Effects</h4>
+          <p><strong>Polar protic solvents</strong> (H<sub>2</sub>O, EtOH) dramatically accelerate S<sub>N</sub>1 by solvating and stabilizing both R<sup>+</sup> and LG<sup>−</sup> via H-bonding.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Mechanisms Navigation -->
+    <section class="card">
+      <h2>5. Cross-Mechanism Relationships</h2>
+      <p>Compare S<sub>N</sub>1 with other fundamental pathways:</p>
+      <ul style="margin: 1rem 1.5rem; line-height: 1.8;">
+        <li><a href="sn2.html"><strong>S<sub>N</sub>2 Mechanism</strong></a> &mdash; One-step concerted backside attack; favored by methyl/1° substrates and strong nucleophiles in polar aprotic solvents.</li>
+        <li><a href="e1.html"><strong>E1 Mechanism</strong></a> &mdash; Direct competitor; shares the exact same carbocation intermediate. High temperature tips the balance to E1.</li>
+        <li><a href="e2.html"><strong>E2 Mechanism</strong></a> &mdash; Concerted bimolecular elimination requiring a strong base and anti-periplanar geometry.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Organic Chemistry Reaction Mechanism Wiki &bull; S<sub>N</sub>1 Mechanism Guide</p>
+  </footer>
+</body>
+</html>
